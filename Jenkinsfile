@@ -24,6 +24,7 @@ pipeline {
     }
 }
 
+@NonCPS
 def loadProperties(){
   // Load properties from a configuration file
   Properties prop = new Properties()
