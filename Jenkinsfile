@@ -16,7 +16,7 @@ pipeline {
 
               // Testing 
               if (getMessageText(lastUpdate(baseURL))){
-                sendMessage(baseURL,getChatID(lastUpdate(baseURL)),"test")
+                sendMessage(baseURL,getChatID(lastUpdate(baseURL)),"Jenkins build number: ${env.BUILD_ID}")
               }
             }
           }
