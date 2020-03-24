@@ -6,10 +6,10 @@ pipeline {
         stage('Reply latest message sent to Bender on telegram') {
           steps{
             script{
-              def String baseURL = "https://api.telegram.org/bot" + properties.token + "/"
-              def Properties properties = new Properties()
+              String baseURL = "https://api.telegram.org/bot" + properties.token + "/"
+
               // Load properties
-              loadProperties()
+              Properties properties = loadProperties()
 
               // Enable or disable proxy
               enableProxy(properties.proxy_enabled.toBoolean())
@@ -26,6 +26,7 @@ pipeline {
 
 def loadProperties(){
   // Load properties from a configuration file
+  Properties properties = new Properties()
   try { 
     File propertiesFile = new File('config.properties')
     propertiesFile.withInputStream {
@@ -37,6 +38,8 @@ def loadProperties(){
       properties.load(it)
     }
   }
+
+  return properties
 }
 
 def enableProxy(isEnabled){
