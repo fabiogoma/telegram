@@ -1,14 +1,13 @@
 import groovy.json.*
 
-def String baseURL = "https://api.telegram.org/bot" + properties.token + "/"
-def Properties properties = new Properties()
-
 pipeline {
     agent any
     stages {
         stage('Reply latest message sent to Bender on telegram') {
           steps{
             script{
+              def String baseURL = "https://api.telegram.org/bot" + properties.token + "/"
+              def Properties properties = new Properties()
               // Load properties
               loadProperties()
 
