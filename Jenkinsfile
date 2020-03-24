@@ -1,21 +1,25 @@
 import groovy.json.*
 
-def baseURL = "https://api.telegram.org/bot" + properties.token + "/"
+def String baseURL = "https://api.telegram.org/bot" + properties.token + "/"
+def Properties properties = new Properties()
 
 pipeline {
     agent any
     stages {
         stage('Reply latest message sent to Bender on telegram') {
-          // Load properties
-          Properties properties = new Properties()
-          loadProperties()
+          steps{
+            script{
+              // Load properties
+              loadProperties()
 
-          // Enable or disable proxy
-          enableProxy(properties.proxy_enabled.toBoolean())
+              // Enable or disable proxy
+              enableProxy(properties.proxy_enabled.toBoolean())
 
-          // Testing 
-          if (getMessageText(lastUpdate(baseURL))){
-            sendMessage(baseURL,getChatID(lastUpdate(baseURL)),"test")
+              // Testing 
+              if (getMessageText(lastUpdate(baseURL))){
+                sendMessage(baseURL,getChatID(lastUpdate(baseURL)),"test")
+              }
+            }
           }
         }
     }
