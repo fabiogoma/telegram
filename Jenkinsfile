@@ -2,18 +2,34 @@ import groovy.json.*
 
 def baseURL = "https://api.telegram.org/bot" + properties.token + "/"
 
-Properties properties = new Properties()
-File propertiesFile = null
+pipeline {
+    agent any
+    stages {
+        stage('Reply latest message sent to Bender on telegram') {
+          // Load properties
+          Properties properties = new Properties()
+          loadProperties()
+
+          // Enable or disable proxy
+          enableProxy(properties.proxy_enabled.toBoolean())
+
+          // Testing 
+          if (getMessageText(lastUpdate(baseURL))){
+            sendMessage(baseURL,getChatID(lastUpdate(baseURL)),"test")
+          }
+        }
+    }
+}
 
 def loadProperties(){
   // Load properties from a configuration file
   try { 
-    propertiesFile = new File('config.properties')
+    File propertiesFile = new File('config.properties')
     propertiesFile.withInputStream {
       properties.load(it)
     }
   } catch (ex) {
-    propertiesFile = new File('/tmp/default.properties')
+    File propertiesFile = new File('/tmp/default.properties')
     propertiesFile.withInputStream {
       properties.load(it)
     }
@@ -64,24 +80,4 @@ def sendMessage(url, chatID, messageText){
   sendMessageConnection.getOutputStream().write(data.getBytes("UTF-8"));
 
   return sendMessageConnection.getInputStream().getText()
-}
-
-pipeline {
-    agent any
-    stages {
-        stage('Reply latest message sent to Bender on telegram') {
-            steps {
-                // Load properties
-                loadProperties()
-
-                // Enable or disable proxy
-                enableProxy(properties.proxy_enabled.toBoolean())
-
-                // Testing 
-                if (getMessageText(lastUpdate(baseURL))){
-                  sendMessage(baseURL,getChatID(lastUpdate(baseURL)),"test")
-                }
-            }
-        }
-    }
 }
