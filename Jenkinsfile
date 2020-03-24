@@ -57,12 +57,12 @@ def lastUpdate(url) {
 def sendMessage(url, chatID, messageText){
   def sendMessageURL = url + "sendMessage"
   def sendMessageConnection = new URL(sendMessageURL).openConnection();
-  def params = '{"chat_id": \"' + chatID + '\", "text": \"' + messageText + '\"}'
+  def data = '{"chat_id": \"' + chatID + '\", "text": \"' + messageText + '\"}'
 
   sendMessageConnection.setRequestMethod("POST")
   sendMessageConnection.setDoOutput(true)
   sendMessageConnection.setRequestProperty("Content-Type", "application/json")
-  sendMessageConnection.getOutputStream().write(params.getBytes("UTF-8"));
+  sendMessageConnection.getOutputStream().write(data.getBytes("UTF-8"));
 
   return sendMessageConnection.getInputStream().getText()
 }
