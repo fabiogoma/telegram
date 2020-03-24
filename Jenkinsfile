@@ -1,11 +1,19 @@
 import groovy.json.*
 
-// Load properties from a configuration file
 Properties properties = new Properties()
-File propertiesFile = new File('config.properties')
+File propertiesFile = null
 
-propertiesFile.withInputStream {
+// Load properties from a configuration file
+try { 
+  propertiesFile = new File('config.properties')
+  propertiesFile.withInputStream {
     properties.load(it)
+  }
+} catch (ex) {
+  propertiesFile = new File('/tmp/default.properties')
+  propertiesFile.withInputStream {
+    properties.load(it)
+  }
 }
 
 def enableProxy(isEnabled){
