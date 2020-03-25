@@ -22,7 +22,7 @@ pipeline {
               enableProxy(properties.proxy_enabled.toBoolean())
 
               // Testing
-              Stringa message = "Jenkins build number: ${env.BUILD_ID}\n" + "Hello ${params.PERSON}\n" + "Biography: ${params.BIOGRAPHY}\n" + "Toggle: ${params.TOGGLE}\n" + "Choice: ${params.CHOICE}\n" + "Password: ${params.PASSWORD}\n" 
+              String message = "Jenkins build number: ${env.BUILD_ID}\n" + "Hello ${params.PERSON}\n" + "Biography: ${params.BIOGRAPHY}\n" + "Toggle: ${params.TOGGLE}\n" + "Choice: ${params.CHOICE}\n" + "Password: ${params.PASSWORD}\n" 
               if (getMessageText(lastUpdate(baseURL))){
                 sendMessage(baseURL,getChatID(lastUpdate(baseURL)),message)
               }
