@@ -2,6 +2,13 @@ import groovy.json.*
 
 pipeline {
     agent any
+    parameters {
+        string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+        text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
+        booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
+        choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
+        password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
+    }
     stages {
         stage('Reply latest message sent to Bender on telegram') {
           steps{
@@ -14,9 +21,10 @@ pipeline {
               // Enable or disable proxy
               enableProxy(properties.proxy_enabled.toBoolean())
 
-              // Testing 
+              // Testing
+              Stringa message = "Jenkins build number: ${env.BUILD_ID}\n" + "Hello ${params.PERSON}\n" + "Biography: ${params.BIOGRAPHY}\n" + "Toggle: ${params.TOGGLE}\n" + "Choice: ${params.CHOICE}\n" + "Password: ${params.PASSWORD}\n" 
               if (getMessageText(lastUpdate(baseURL))){
-                sendMessage(baseURL,getChatID(lastUpdate(baseURL)),"Jenkins build number: ${env.BUILD_ID}")
+                sendMessage(baseURL,getChatID(lastUpdate(baseURL)),message)
               }
             }
           }
